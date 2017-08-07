@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Fireworks</title>
+    <script src="p5.js"></script>
+    <!--<style media="screen">
+      body{
+        background: #000000;
+      }
+    </style>-->
+  </head>
+  <body>
+    <center>
+      <script type="text/javascript">
+      var popul;
+      var lifespan=100;
+      var currentLife=0;
+      function DNA(){
+        this.genes=[];
+        for (var i = 0; i < lifespan; i++) {
+          this.genes[i]=p5.Vector.random2D();
+        }
+        this.getInd=function(ind){
+          return this.genes[ind]
+        }
+      }
+      function Rocket(){
+        this.pos=createVector(width/2,height);
+        this.acc=createVector();
+        this.vel=createVector();
+        this.dna=new DNA();
+
+        this.update=function(index){
+          this.applyF(this.dna.getInd(index));
+          this.vel.add(this.acc);
+          this.pos.add(this.vel);
+          this.acc.mult(0);
+        }
+
+        this.show=function(){
+          fill(255);
+          ellipse(this.pos.x,this.pos.y,20,20);
+        }
+
+        this.applyF=function(force){
+          this.acc.add(force);
+        }
+      }
+      function Population(){
+        this.rocks=[];
+        this.popSize=100;
+        for (var i = 0; i < this.popSize; i++) {
+          this.rocks[i]=new Rocket();
+        }
+        this.show=function(index){
+          for (var i = 0; i < this.popSize; i++) {
+            this.rocks[i].update(index);
+            this.rocks[i].show();
+          }
+        }
+      }
+      var target;
+      function setup(){
+        createCanvas(400,300);
+        popul=new Population();
+        target=new createVector(width/2,30)
+      }
+      function draw(){
+        background(0);
+        ellipse(target.x,target.y,30,30);
+        if(currentLife<lifespan){
+          popul.show(currentLife);
+          currentLife++;
+        }
+      }
+      </script>
+    </center>
+  </body>
+</html>
