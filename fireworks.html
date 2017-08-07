@@ -14,32 +14,65 @@
     <center>
       <script type="text/javascript">
       var popul;
-      var lifespan=100;
+      var lifespan=200;
       var currentLife=0;
-      function DNA(){
-        this.genes=[];
+      function DNA(nGenes){
+        if (nGenes) {
+          this.genes=nGenes
+        } else {
+          this.genes=[];
+        }
         for (var i = 0; i < lifespan; i++) {
           this.genes[i]=p5.Vector.random2D();
+          this.genes[i].setMag(0.1);
         }
         this.getInd=function(ind){
           return this.genes[ind]
         }
+        this.crossover=function(partner){
+          var newDna=[];
+          var mid=floor(random(this.genes.length))
+          for (var i = 0; i < this.genes.length; i++) {
+            if(i>mid){
+              newDna[i]=this.genes[i];
+            } else {
+              newDna[i]=partner.genes[i];
+            }
+          }
+          return new DNA(newDna);
+        }
       }
-      function Rocket(){
+      function Rocket(genes){
         this.pos=createVector(width/2,height);
         this.acc=createVector();
         this.vel=createVector();
-        this.dna=new DNA();
-
+        if (genes) {
+          this.dna=genes;
+        } else {
+          this.dna=new DNA();
+        }
+        this.fit=0;
         this.update=function(index){
           this.applyF(this.dna.getInd(index));
           this.vel.add(this.acc);
           this.pos.add(this.vel);
           this.acc.mult(0);
         }
+        this.getFit=function(){
+          return this.fit;
+        }
+        this.setFit=function(tx,ty){
+          if(100/dist(tx,ty,this.pos.x,this.pos.y)>this.fit){
+            this.fit=100/dist(tx,ty,this.pos.x,this.pos.y);
+          }
+          if(dist(tx,ty,this.pos.x,this.pos.y)<15){
+            this.fit*=10;
+          }
+        }
 
         this.show=function(){
-          fill(255);
+          fill(255,100);
+          noStroke();
           ellipse(this.pos.x,this.pos.y,20,20);
         }
 
@@ -47,17 +80,51 @@
           this.acc.add(force);
         }
       }
-      function Population(){
-        this.rocks=[];
+      function Population(popOld){
         this.popSize=100;
+        this.mating=[];
+        this.rocks=[];
         for (var i = 0; i < this.popSize; i++) {
           this.rocks[i]=new Rocket();
         }
-        this.show=function(index){
+        this.show=function(index,tx,ty){
           for (var i = 0; i < this.popSize; i++) {
             this.rocks[i].update(index);
+            this.rocks[i].setFit(tx,ty);
             this.rocks[i].show();
           }
+        }
+        this.evaluate=function() {
+          var maxFit=10;
+          var fitness=0;
+          for (var i = 0; i < this.popSize; i++) {
+            if(this.rocks[i].getFit()>maxFit){
+              maxFit=this.rocks[i].getFit()
+            }
+            fitness+=this.rocks[i].getFit();
+          }
+          console.log(fitness/this.popSize);
+          fitness=0;
+          for (var i = 0; i < this.popSize; i++) {
+            this.rocks[i].fit/=maxFit;
+          }
+          this.mating=[];
+          for (var i = 0; i < this.popSize; i++) {
+            var n=this.rocks[i].fit*100;
+            for (var j = 0; j < n; j++) {
+              this.mating[this.mating.length]=this.rocks[i];
+            }
+          }
+        }
+        this.select=function(){
+          var newPop=[];
+          for (var i = 0; i < this.popSize; i++) {
+            var pa=random(this.mating).dna;
+            var pb=random(this.mating).dna;
+            var child = pa.crossover(pb);
+            newPop[i]=new Rocket(child);
+          }
+          this.rocks=newPop;
         }
       }
       var target;
@@ -68,10 +135,15 @@
       }
       function draw(){
         background(0);
+        fill(200,0,0);
         ellipse(target.x,target.y,30,30);
         if(currentLife<lifespan){
-          popul.show(currentLife);
+          popul.show(currentLife,target.x,target.y);
           currentLife++;
+        } else {
+          popul.evaluate();
+          popul.select();
+          currentLife=0;
         }
       }
       </script>
