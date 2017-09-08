@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
 <head>
   <meta charset="utf-8">
   <title>Fireworks</title>
@@ -54,6 +55,25 @@
         this.genes = genes;
       } else {
         this.genes = [];
+=======
+  <head>
+    <meta charset="utf-8">
+    <title>Fireworks</title>
+    <script src="p5.js"></script>
+  </head>
+  <body>
+    <center>
+      <script type="text/javascript">
+      var popul;
+      var lifespan=200;
+      var currentLife=0;
+      function DNA(nGenes){
+        if (nGenes) {
+          this.genes=nGenes
+        } else {
+          this.genes=[];
+        }
+>>>>>>> 605bc13afe8cd52e63931e95f091631da218b553
         for (var i = 0; i < lifespan; i++) {
           this.genes[i] = p5.Vector.random2D();
           //this.genes[i].setMag();
