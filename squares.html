@@ -2,18 +2,138 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Fireworks</title>
+  <title>Squares</title>
   <script src="p5.js"></script>
-  <!--<style media="screen">
-  body{
-  background: #000000;
-}
-</style>-->
+  <script src="p5.dom.js"></script>
+  <style media="screen">
+   body{
+    background: #ffffff;
+   }
+   input[type=button]{
+
+   }
+  </style>
 </head>
 <body>
   <center>
     <script type="text/javascript">
-    
+    function square(al){
+      this.alive=al;
+      this.swap=function(){
+        this.alive = !this.alive
+      }
+    }
+    function Board(wid,hei) {
+      this.sqwid=int(600/wid)
+      this.sqhi=int(600/hei)
+      this.width=wid
+      this.height=hei
+      this.grid=[]
+      this.moves=0
+      this.drawRect=function(){
+        for (var x = 0; x <this.width; x++) {
+          for (var y = 0; y < this.height; y++) {
+            fill(25, 209, 12);
+            if(this.grid[x][y].alive){
+              fill(193, 48, 19)
+            }
+            noStroke()
+            rect(x*this.sqwid,y*this.sqhi,this.sqwid-1,this.sqhi-1)
+          }
+        }
+      }
+      this.move=function(x,y){
+        if(x>=0 && y>=0 && x<this.grid.length && y<this.grid[0].length){
+          this.grid[x][y].swap();
+          this.drawXYRect(x,y);
+          if(x+1<this.grid.length){
+           this.grid[x+1][y].swap();
+           this.drawXYRect(x+1,y)
+          }
+          if(x-1>=0){
+           this.grid[x-1][y].swap();
+           this.drawXYRect(x-1,y)
+          }
+          if(y-1>=0){
+           this.grid[x][y-1].swap();
+           this.drawXYRect(x,y-1)
+          }
+          if(y+1<this.grid[0].length){
+           this.grid[x][y+1].swap();
+           this.drawXYRect(x,y+1)
+          }
+        }
+      }
+      this.drawXYRect=function(x,y){
+        fill(25, 209, 12);
+        if(this.grid[x][y].alive){
+         fill(193, 48, 19)
+        }
+        rect(x*this.sqwid,y*this.sqhi,this.sqwid-1,this.sqhi-1)
+      }
+      this.start=function(){
+        for (var x = 0; x <this.width; x++) {
+          this.grid[x]=[]
+          for (var y = 0; y < this.height; y++) {
+            this.grid[x][y]=new square(false)
+          }
+        }
+        this.drawRect()
+      }
+      this.start()
+    }
+    var gameWidth=5
+    var gameHeight=5
+    var b;
+    var sizeIn;
+    var resetSubmit;
+    function setup(){
+      createCanvas(600,600);
+      background(255);
+      b=new Board(gameWidth,gameHeight);
+      sizeIn = createInput();
+      sizeIn.position(8,610);
+      resetSubmit = createButton('Reset / Submit Size');
+      resetSubmit.position(sizeIn.width+sizeIn.x,610);
+      resetSubmit.mousePressed(reset);
+      rand=createButton("Random")
+      rand.mousePressed(randomMoves);
+      rand.position(resetSubmit.width+resetSubmit.x,610)
+      HowtoT=createElement("h2","How to Play")
+      Howto=createElement("p","To play just press a square and it will swap it and all adjacent squares. The goal is to make the grid all red. For an extra challenge change the size by typing '[width], [height]' into the text box then press the reset button. You can also try a random state by pressing the 'Random' Button.")
+      info=createElement("h2","Information")
+      info.position(10,720)
+      info2=createElement("p","This game is based off of a game found in terminal on macs. You can get to this game by entering 'emacs' into terminal then pressing escape then 'x' then '5x5'. this game is rather challenging but not well known so I decided to put it on a website. Mine is able to change sizes which I think is a big improvement to the terminal one.")
+      info2.position(info.x,info.y+34)
+      info2.size(400,50)
+    }
+    function randomMoves(){
+      ar=[]
+      for (var i = 0; i < b.width*b.height; i++) {
+        ar[i]=int(random(0,2))==1 ? true : false
+      }
+      for (var i = 0; i < ar.length; i++) {
+        if(ar[i]){
+          b.move(i%b.width,int(i/b.height))
+        }
+      }
+    }
+    function reset(){
+      if(sizeIn.value() != ""){
+        background(255)
+        var input = sizeIn.value()
+        var x=input.substring(0,input.indexOf(","))
+        var y=input.substring(input.indexOf(",")+1)
+        x=parseInt(x)
+        y=parseInt(y)
+        gameHeight=y
+        gameWidth=x
+      }
+      b=new Board(gameWidth,gameHeight)
+    }
+    function mousePressed(){
+      b.move(int(mouseX/(600/gameWidth)),int(mouseY/(600/gameHeight)))
+    }
     </script>
   </center>
 </body>
