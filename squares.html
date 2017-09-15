@@ -23,13 +23,14 @@
         this.alive = !this.alive
       }
     }
-    function Board(wid,hei) {
+    function Board(wid,hei,mvShap) {
       this.sqwid=int(600/wid)
       this.sqhi=int(600/hei)
       this.width=wid
       this.height=hei
       this.grid=[]
       this.moves=0
+      this.moveShape=mvShap
       this.drawRect=function(){
         for (var x = 0; x <this.width; x++) {
           for (var y = 0; y < this.height; y++) {
@@ -43,26 +44,31 @@
         }
       }
       this.move=function(x,y){
-        if(x>=0 && y>=0 && x<this.grid.length && y<this.grid[0].length){
-          this.grid[x][y].swap();
-          this.drawXYRect(x,y);
-          if(x+1<this.grid.length){
-           this.grid[x+1][y].swap();
-           this.drawXYRect(x+1,y)
-          }
-          if(x-1>=0){
-           this.grid[x-1][y].swap();
-           this.drawXYRect(x-1,y)
-          }
-          if(y-1>=0){
-           this.grid[x][y-1].swap();
-           this.drawXYRect(x,y-1)
-          }
-          if(y+1<this.grid[0].length){
-           this.grid[x][y+1].swap();
-           this.drawXYRect(x,y+1)
+        var tapx=0
+        var tapy=0
+        for (var i = 0; i < this.moveShape.length; i++) {
+          for (var j = 0; j < this.moveShape[i].length; j++) {
+            if (this.moveShape[i][j]==2 || this.moveShape[i][j]==3) {
+              tapx=i
+              tapy=j
+            }
           }
         }
+        for (var i = 0; i < this.moveShape.length; i++) {
+          for(var j = 0; j < this.moveShape[i].length; j++){
+            var ydiff=i-tapx
+            var xdiff=j-tapy
+            if (this.inBounds(x+xdiff,y-ydiff)) {
+              if (this.moveShape[i][j]==1 || this.moveShape[i][j]==2) {
+                this.grid[x+xdiff][y-ydiff].swap()
+                this.drawXYRect(x+xdiff,y-ydiff)
+              }
+            }
+          }
+        }
+      }
+      this.inBounds=function(x,y){
+        return (x>=0 && y>=0) && (x<this.width && y<this.height)
       }
       this.drawXYRect=function(x,y){
         fill(25, 209, 12);
@@ -87,10 +93,11 @@
     var b;
     var sizeIn;
     var resetSubmit;
+    var moveSequence=[[0,1,0],[0,3,1],[0,1,0]]
     function setup(){
       createCanvas(600,600);
       background(255);
-      b=new Board(gameWidth,gameHeight);
+      b=new Board(gameWidth,gameHeight,moveSequence);
       sizeIn = createInput();
       sizeIn.position(8,610);
       resetSubmit = createButton('Reset / Submit Size');
@@ -129,7 +136,7 @@
         gameHeight=y
         gameWidth=x
       }
-      b=new Board(gameWidth,gameHeight)
+      b=new Board(gameWidth,gameHeight,moveSequence)
     }
     function mousePressed(){
       b.move(int(mouseX/(600/gameWidth)),int(mouseY/(600/gameHeight)))
