@@ -139,6 +139,7 @@
       b=new Board(gameWidth,gameHeight,moveSequence)
     }
     function mousePressed(){
+      if(mouseX>=0 && mouseY>=0 && mouseX<600 && mouseY<600)
       b.move(int(mouseX/(600/gameWidth)),int(mouseY/(600/gameHeight)))
     }
     </script>
