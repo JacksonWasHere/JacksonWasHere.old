@@ -152,16 +152,26 @@
       solution[i]=false
     }
     function solve(){
-      console.log("Test: "+solution);
       var num=pow(2,solution.length)
       for (var i = 0; i < num; i++) {
         solutionAttempt(solution)
         if(solved()){
-          console.log("Good: "+solution);
+          console.log("attempt #"+i+": "+outSolution());
         }
         reset()
         solution=increase(solution)
       }
+    }
+    function outSolution() {
+      var out=""
+      for (var i = 0; i < solution.length; i++) {
+        if(solution[i]){
+          out+="1"
+        } else {
+          out+="0"
+        }
+      }
+      return out
     }
     function solved(){
       var isSolved=true
