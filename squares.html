@@ -135,12 +135,76 @@
         y=parseInt(y)
         gameHeight=y
         gameWidth=x
+        for (var i = 0; i < gameWidth; i++) {
+          solution[i]=false
+        }
+        sizeIn.value("")
       }
       b=new Board(gameWidth,gameHeight,moveSequence)
     }
     function mousePressed(){
       if(mouseX>=0 && mouseY>=0 && mouseX<600 && mouseY<600)
       b.move(int(mouseX/(600/gameWidth)),int(mouseY/(600/gameHeight)))
+    }
+    var solution=[]
+    for (var i = 0; i < gameWidth; i++) {
+      solution[i]=false
+    }
+    function solve(){
+      console.log("Test: "+solution);
+      var num=pow(2,solution.length)
+      for (var i = 0; i < num; i++) {
+        solutionAttempt(solution)
+        if(solved()){
+          console.log("Good: "+solution);
+        }
+        reset()
+        solution=increase(solution)
+      }
+    }
+    function solved(){
+      var isSolved=true
+      for (var i = 0; i < b.grid.length; i++) {
+        for (var j = 0; j < b.grid[i].length; j++) {
+          if (!b.grid[i][j].alive) {
+            isSolved=false
+          }
+        }
+      }
+      return isSolved
+    }
+    function increase(arr) {
+      var out = []
+      for (var i = 0; i < arr.length; i++) {
+        if(i==0){
+          if(arr[i]){
+            out[i]=false
+          } else {
+            out[i]=true
+          }
+        } else {
+          if(arr[i-1] && !(out[i-1])){
+            out[i]=!arr[i]
+          } else {
+            out[i]=arr[i]
+          }
+        }
+      }
+      return out
+    }
+    function solutionAttempt(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        if(arr[i]){
+          b.move(i,0)
+        }
+      }
+      for (var i = 1; i < gameWidth; i++) {
+        for (var j = 0; j < gameHeight; j++) {
+          if(!b.grid[j][i-1].alive){
+            b.move(j,i)
+          }
+        }
+      }
     }
     </script>
   </center>
