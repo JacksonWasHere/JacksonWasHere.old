@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>10 Print</title>
+    <script type="text/javascript" src="p5.js"></script>
+    <style media="screen">
+      body{
+        background: black
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var index=0
+      var gheight=0
+      var gwidth=10
+      function setup() {
+        createCanvas(400,400)
+        background(0)
+        frameRate(100)
+      }
+      function draw() {
+        frameRate(70)
+        var rc=0
+        var gc=0
+        var bc=0
+        var r=int(random(0,4))
+        if(r==1){
+          rc=255
+        } else if(r==2){
+          gc=255
+        } else if(r==3){
+          bc=255
+        }
+        r=int(random(0,4))
+        if(r==1){
+          line0(rc,gc,bc)
+        } else if(r==2){
+          line0(rc,gc,bc)
+        } else if(r==3){
+          line1(rc,gc,bc)
+        } else {
+          line1(rc,gc,bc)
+        }
+        index+=gwidth
+        if(index==width){
+          gheight+=gwidth
+        }
+        index%=width
+      }
+      function line0(r,g,b) {
+        stroke(r,g,b)
+        line(index,gheight,index+gwidth,gheight+gwidth)
+      }
+      function line1(r,g,b) {
+        stroke(r,g,b)
+        line(index+gwidth,gheight,index,gheight+gwidth)
+      } function line2(r,g,b) {
+        stroke(r,g,b)
+        line(index+gwidth,gheight,index,gheight+gwidth)
+        line(index,gheight,index+gwidth,gheight+gwidth)
+      }
+    </script>
+  </body>
+</html>
