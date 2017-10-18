@@ -9,11 +9,15 @@
   <body>
     <script type="text/javascript">
 
-var g=0.2
+var g=1
 var d
 var jumped=false
 var obs=[]
+var nextwait=10
 var framenum=0
+var dead=false
+var score=0
+var highScore=0
 function Dinosaur() {
   this.x=20.0
   this.y=145.0
@@ -29,7 +33,7 @@ function Dinosaur() {
 }
 function obstacle() {
   this.x=400
-  this.xv=3
+  this.xv=8
   this.draw=function() {
     fill(255)
     rect(this.x,150,10,20)
@@ -45,26 +49,37 @@ function setup() {
   d=new Dinosaur()
 }
 function draw() {
-  background(0)
-  d.update()
-  for (var i = 0; i < obs.length; i++) {
-    obs[i].update()
-    if(obs[i].x<-20){
-      obs.splice(i,1)
+  //console.log(dead);
+  if(!dead){
+    background(0)
+    d.update()
+    textSize(20)
+    text("Score: "+score,250,30)
+    text("Highscore: "+highScore,220,55)
+    for (var i = 0; i < obs.length; i++) {
+      obs[i].update()
+      if((obs[i].x>=d.x && obs[i].x <= d.x+15) && (145>=d.y && 145<=d.y+30)){
+        die()
+      }
+      if(obs[i].x<-20){
+         obs.splice(i,1)
+      }
     }
-  }
-  framenum+=1
-  if(framenum%60==0){
-    addObstacle()
-    console.log("test");
-  }
-  if(d.y<145){
-    d.yv+=(g)
-  }
-  if(d.y>=145){
-    d.yv=0
-    d.y=145
-    jumped=false
+    score+=1
+    framenum+=1
+    if(framenum==nextwait){
+      addObstacle()
+      framenum=0
+      nextwait=int(random(20,70))
+    }
+    if(d.y<145){
+      d.yv+=(g)
+    }
+    if(d.y>=145){
+      d.yv=0
+      d.y=145
+      jumped=false
+    }
   }
 }
 function addObstacle() {
@@ -72,13 +87,28 @@ function addObstacle() {
 }
 function jump() {
   if(!jumped){
-    d.yv=(-5)
+    d.yv=(-10)
     jumped=true
   }
 }
+function die(){
+  stroke(255)
+  textSize(20)
+  text("YOU DIED",150,77)
+  textSize(15)
+  text("press space to start over",120,100)
+  if(score>highScore){
+    highScore=score
+  }
+  dead=true
+}
 function keyPressed() {
-  if(key==" "){
+  if(key==" " && !dead){
     jump()
+  } else if(key==" " && dead){
+    dead=false
+    obs=[]
+    score=0
   }
 }
 
