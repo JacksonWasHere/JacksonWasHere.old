@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dumb Dinosaur game</title>
+    <script src="p5.js"></script>
+    <script src='p5.dom.js'></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var g=0.2
+var d
+var jumped=false
+var obs=[]
+var framenum=0
+function Dinosaur() {
+  this.x=20.0
+  this.y=145.0
+  this.yv=0.0
+  this.drawDino=function(){
+    fill(255)
+    rect(this.x,this.y,15,30)
+  }
+  this.update=function() {
+    this.y+=this.yv
+    this.drawDino()
+  }
+}
+function obstacle() {
+  this.x=400
+  this.xv=3
+  this.draw=function() {
+    fill(255)
+    rect(this.x,150,10,20)
+  }
+  this.update=function(){
+    this.x-=this.xv
+    this.draw()
+  }
+}
+function setup() {
+  createCanvas(400,200)
+  background(0)
+  d=new Dinosaur()
+}
+function draw() {
+  background(0)
+  d.update()
+  for (var i = 0; i < obs.length; i++) {
+    obs[i].update()
+    if(obs[i].x<-20){
+      obs.splice(i,1)
+    }
+  }
+  framenum+=1
+  if(framenum%60==0){
+    addObstacle()
+    console.log("test");
+  }
+  if(d.y<145){
+    d.yv+=(g)
+  }
+  if(d.y>=145){
+    d.yv=0
+    d.y=145
+    jumped=false
+  }
+}
+function addObstacle() {
+  obs.push(new obstacle())
+}
+function jump() {
+  if(!jumped){
+    d.yv=(-5)
+    jumped=true
+  }
+}
+function keyPressed() {
+  if(key==" "){
+    jump()
+  }
+}
+
+    </script>
+  </body>
+</html>
