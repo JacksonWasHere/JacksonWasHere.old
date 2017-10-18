@@ -9,7 +9,7 @@
   <body>
     <script type="text/javascript">
 
-var g=1
+var g=2
 var d
 var jumped=false
 var obs=[]
@@ -33,7 +33,7 @@ function Dinosaur() {
 }
 function obstacle() {
   this.x=400
-  this.xv=8
+  this.xv=14
   this.draw=function() {
     fill(255)
     rect(this.x,150,10,20)
@@ -44,7 +44,7 @@ function obstacle() {
   }
 }
 function setup() {
-  createCanvas(400,200)
+  createCanvas(300,200)
   background(0)
   d=new Dinosaur()
 }
@@ -87,7 +87,7 @@ function addObstacle() {
 }
 function jump() {
   if(!jumped){
-    d.yv=(-10)
+    d.yv=(-15)
     jumped=true
   }
 }
@@ -96,7 +96,7 @@ function die(){
   textSize(20)
   text("YOU DIED",150,77)
   textSize(15)
-  text("press space to start over",120,100)
+  text("press r to start over",130,100)
   if(score>highScore){
     highScore=score
   }
@@ -105,7 +105,7 @@ function die(){
 function keyPressed() {
   if(key==" " && !dead){
     jump()
-  } else if(key==" " && dead){
+  } else if(key=="R" && dead){
     dead=false
     obs=[]
     score=0
