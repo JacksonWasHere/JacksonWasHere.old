@@ -51,7 +51,6 @@ function setup() {
 function draw() {
   if(!dead){
     background(0)
-    d.update()
     textSize(20)
     text("Score: "+score,20,30)
     text("Highscore: "+highScore,20,55)
@@ -60,13 +59,11 @@ function draw() {
       if((obs[i].x>=d.x && obs[i].x <= d.x+15) && (145>=d.y && 145<=d.y+30)){
         die()
       }
-      if(obs[i].x<=100){
-        jump()
-      }
       if(obs[i].x<-20){
          obs.splice(i,1)
       }
     }
+    d.update()
     score+=1
     framenum+=1
     if(framenum==nextwait){
@@ -94,6 +91,7 @@ function jump() {
   }
 }
 function die(){
+  push()
   stroke(255)
   textSize(20)
   text("YOU DIED",100,77)
@@ -103,6 +101,7 @@ function die(){
     highScore=score
   }
   dead=true
+  pop()
 }
 function keyPressed() {
   if(key==" " && !dead){
