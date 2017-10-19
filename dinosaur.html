@@ -12,6 +12,7 @@
 var g=2.5
 var d
 var jumped=false
+var AImode=false
 var obs=[]
 var nextwait=10
 var framenum=0
@@ -65,9 +66,8 @@ function draw() {
     text("Highscore: "+highScore,20,55)
     for (var i = 0; i < obs.length; i++) {
       obs[i].update()
-      if(obs[i].x<70){
+      if(obs[i].x<70 && AImode){
         jump()
-        console.log(d.yv)
       }
       if((obs[i].x>=d.x && obs[i].x <= d.x+15) && (145>=d.y && 145<=d.y+30)){
         die()
@@ -76,7 +76,6 @@ function draw() {
          obs.splice(i,1)
       }
     }
-    console.log(d.yv)
     score+=1
     framenum+=1
     if(framenum==nextwait){
