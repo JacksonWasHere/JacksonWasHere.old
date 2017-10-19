@@ -54,8 +54,8 @@ function draw() {
     background(0)
     d.update()
     textSize(20)
-    text("Score: "+score,250,30)
-    text("Highscore: "+highScore,220,55)
+    text("Score: "+score,50,30)
+    text("Highscore: "+highScore,20,55)
     for (var i = 0; i < obs.length; i++) {
       obs[i].update()
       if((obs[i].x>=d.x && obs[i].x <= d.x+15) && (145>=d.y && 145<=d.y+30)){
