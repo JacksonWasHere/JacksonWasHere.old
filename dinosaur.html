@@ -112,6 +112,15 @@ function die(){
   dead=true
   pop()
 }
+function mousePressed(){
+  if(!dead){
+    jump()
+  } else {
+    dead=false
+    obs=[]
+    score=0
+  }
+}
 function keyPressed() {
   if(key==" " && !dead){
     jump()
