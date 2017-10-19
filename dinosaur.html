@@ -54,6 +54,7 @@ function draw() {
     textSize(20)
     text("Score: "+score,20,30)
     text("Highscore: "+highScore,20,55)
+    d.update()
     for (var i = 0; i < obs.length; i++) {
       obs[i].update()
       if((obs[i].x>=d.x && obs[i].x <= d.x+15) && (145>=d.y && 145<=d.y+30)){
@@ -63,14 +64,6 @@ function draw() {
          obs.splice(i,1)
       }
     }
-    d.update()
-    score+=1
-    framenum+=1
-    if(framenum==nextwait){
-      addObstacle()
-      framenum=0
-      nextwait=int(random(20,70))
-    }
     if(d.y<145){
       d.yv+=(g)
     }
@@ -78,6 +71,13 @@ function draw() {
       d.yv=0
       d.y=145
       jumped=false
+    }
+    score+=1
+    framenum+=1
+    if(framenum==nextwait){
+      addObstacle()
+      framenum=0
+      nextwait=int(random(20,70))
     }
   }
 }
