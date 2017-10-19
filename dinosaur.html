@@ -52,6 +52,10 @@ function setup() {
 function draw() {
   if(!dead){
     background(0,100,200)
+    push()
+    fill(20,220,40)
+    rect(-2,140,width+5,height+2)
+    pop()
     d.update()
     if(d.y<145){
       d.yv+=(g)
