@@ -66,7 +66,7 @@ function draw() {
     text("Highscore: "+highScore,20,55)
     for (var i = 0; i < obs.length; i++) {
       obs[i].update()
-      if(obs[i].x<85 && AImode){
+      if(obs[i].x<95 && AImode){
         jump()
       }
       if((obs[i].x>=d.x && obs[i].x <= d.x+15) && (145>=d.y && 145<=d.y+30)){
@@ -81,7 +81,7 @@ function draw() {
     if(framenum==nextwait){
       addObstacle()
       framenum=0
-      nextwait=int(random(12,30))
+      nextwait=int(random(15,30))
     }
   }
 }
