@@ -58,6 +58,9 @@ function draw() {
     for (var i = 0; i < obs.length; i++) {
       obs[i].update()
       console.log(obs[i].x)
+      if(obs[i].x<70){
+        jump()
+      }
       if((obs[i].x>=d.x && obs[i].x <= d.x+15) && (145>=d.y && 145<=d.y+30)){
         die()
       }
