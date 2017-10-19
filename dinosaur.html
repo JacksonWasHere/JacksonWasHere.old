@@ -59,7 +59,7 @@ function draw() {
       obs[i].update()
       if(obs[i].x<70){
         jump()
-        console.log(obs[i].x)
+        console.log(d.yv)
       }
       if((obs[i].x>=d.x && obs[i].x <= d.x+15) && (145>=d.y && 145<=d.y+30)){
         die()
@@ -76,6 +76,7 @@ function draw() {
       d.y=145
       jumped=false
     }
+    console.log(d.yv)
     score+=1
     framenum+=1
     if(framenum==nextwait){
@@ -89,7 +90,6 @@ function addObstacle() {
   obs.push(new obstacle())
 }
 function jump() {
-  console.log("j0")
   if(!jumped){
     d.yv=(-15)
     jumped=true
