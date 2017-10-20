@@ -141,6 +141,40 @@
     function mousePressed(){
       b.move(int(mouseX/(600/gameWidth)),int(mouseY/(600/gameHeight)))
     }
+    var solution=[]
+    for (var i = 0; i < gameWidth; i++) {
+      solution[i]=false;
+    }
+    function displaySolution() {
+      var out=""
+      for (var i = 0; i < solution.length; i++) {
+        if(solution[i]){
+          out+="1"
+        } else {
+          out+="0"
+        }
+      }
+      return out
+    }
+    function solve() {
+      var num = pow(2,solution.length)
+      var solves=0
+      for (var i = 0; i < num; i++) {
+        solutionAttempt(solution)
+        if(solved()){
+          console.log("attempt #"+i+": "+displaySolution())
+          solves++
+        }
+        reset()
+        solution=increase(solution)
+      }
+    }
+    function solved() {
+      var isSolved=true
+      for([] s:b.grid){
+        console.log(s)
+      }
+    }
     </script>
   </center>
 </body>

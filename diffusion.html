@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Diffusion</title>
+  <script src="p5.js"></script>
+  <script src="p5.dom.js"></script>
+	</head>
+	<body>
+
+<script type="text/javascript">
+var grid=[]
+function setup() {
+	createCanvas(100,100)
+	background(0)
+	for(var i = 0;i<width/2;i++){
+		grid[i]=[]
+		for (var j = 0; j < height/2; j++) {
+			grid[i][j]=0
+		}
+	}
+	startRect(21,21,1,1)
+	for (var i = 1; i < grid.length-1; i++) {
+		for (var j = 1; j < grid[i].length-1; j++) {
+			noStroke()
+			fill(grid[i][j])
+			rect(i*2,j*2,2,2);
+		}
+	}
+	frameRate(20)
+}
+function draw(){
+	background(0)
+	// if(!mousePressed){
+		for (var i = 1; i < grid.length-1; i++) {
+			for (var j = 1; j < grid[i].length-1; j++) {
+				noStroke()
+				fill(grid[i][j])
+				rect(i*2,j*2,2,2);
+				diffuse(i,j)
+			}
+		}
+	// } else {
+
+	// }
+	console.log(int(frameRate()))
+}
+function startRect(x,y,w,h) {
+	for (var i = x; i < x+w; i++) {
+		for (var j = y; j < y+h; j++) {
+			grid[i][j]=500000
+		}
+	}
+}
+function diffuse(x,y) {
+	var sum=0
+	for(var i = x-1;i<=x;i++){
+		for (var j = y-1; j <= y; j++) {
+			sum+=grid[i][j]
+		}
+	}
+	var avg=sum/4
+	for(var i = x-1;i<=x;i++){
+		for (var j = y-1; j <= y; j++) {
+			grid[i][j]=avg
+		}
+	}
+}
+</script>
+
+	</body>
+</html>
