@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107125985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-107125985-1');
+</script>
   <meta charset="utf-8">
   <title>Squares</title>
   <script src="p5.js"></script>
@@ -135,17 +144,40 @@
         y=parseInt(y)
         gameHeight=y
         gameWidth=x
+        solution=[]
+        for (var i = 0; i < gameWidth; i++) {
+          solution[i]=false
+        }
+        sizeIn.value("")
       }
       b=new Board(gameWidth,gameHeight,moveSequence)
     }
     function mousePressed(){
+      if(mouseX>=0 && mouseY>=0 && mouseX<600 && mouseY<600)
       b.move(int(mouseX/(600/gameWidth)),int(mouseY/(600/gameHeight)))
     }
     var solution=[]
     for (var i = 0; i < gameWidth; i++) {
+<<<<<<< HEAD
       solution[i]=false;
     }
     function displaySolution() {
+=======
+      solution[i]=false
+    }
+    function solve(){
+      var num=pow(2,solution.length)
+      for (var i = 0; i < num; i++) {
+        solutionAttempt(solution)
+        if(solved()){
+          console.log("attempt #"+i+": "+outSolution());
+        }
+        reset()
+        solution=increase(solution)
+      }
+    }
+    function outSolution() {
+>>>>>>> cebb9e58e452a827096d19213f9d0f61b413feed
       var out=""
       for (var i = 0; i < solution.length; i++) {
         if(solution[i]){
@@ -156,6 +188,7 @@
       }
       return out
     }
+<<<<<<< HEAD
     function solve() {
       var num = pow(2,solution.length)
       var solves=0
@@ -173,6 +206,50 @@
       var isSolved=true
       for([] s:b.grid){
         console.log(s)
+=======
+    function solved(){
+      var isSolved=true
+      for (var i = 0; i < b.grid.length; i++) {
+        for (var j = 0; j < b.grid[i].length; j++) {
+          if (!b.grid[i][j].alive) {
+            isSolved=false
+          }
+        }
+      }
+      return isSolved
+    }
+    function increase(arr) {
+      var out = []
+      for (var i = 0; i < arr.length; i++) {
+        if(i==0){
+          if(arr[i]){
+            out[i]=false
+          } else {
+            out[i]=true
+          }
+        } else {
+          if(arr[i-1] && !(out[i-1])){
+            out[i]=!arr[i]
+          } else {
+            out[i]=arr[i]
+          }
+        }
+      }
+      return out
+    }
+    function solutionAttempt(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        if(arr[i]){
+          b.move(i,0)
+        }
+      }
+      for (var i = 1; i < gameWidth; i++) {
+        for (var j = 0; j < gameHeight; j++) {
+          if(!b.grid[j][i-1].alive){
+            b.move(j,i)
+          }
+        }
+>>>>>>> cebb9e58e452a827096d19213f9d0f61b413feed
       }
     }
     </script>
