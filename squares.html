@@ -158,6 +158,11 @@
     }
     var solution=[]
     for (var i = 0; i < gameWidth; i++) {
+<<<<<<< HEAD
+      solution[i]=false;
+    }
+    function displaySolution() {
+=======
       solution[i]=false
     }
     function solve(){
@@ -172,6 +177,7 @@
       }
     }
     function outSolution() {
+>>>>>>> cebb9e58e452a827096d19213f9d0f61b413feed
       var out=""
       for (var i = 0; i < solution.length; i++) {
         if(solution[i]){
@@ -182,6 +188,25 @@
       }
       return out
     }
+<<<<<<< HEAD
+    function solve() {
+      var num = pow(2,solution.length)
+      var solves=0
+      for (var i = 0; i < num; i++) {
+        solutionAttempt(solution)
+        if(solved()){
+          console.log("attempt #"+i+": "+displaySolution())
+          solves++
+        }
+        reset()
+        solution=increase(solution)
+      }
+    }
+    function solved() {
+      var isSolved=true
+      for([] s:b.grid){
+        console.log(s)
+=======
     function solved(){
       var isSolved=true
       for (var i = 0; i < b.grid.length; i++) {
@@ -224,6 +249,7 @@
             b.move(j,i)
           }
         }
+>>>>>>> cebb9e58e452a827096d19213f9d0f61b413feed
       }
     }
     </script>

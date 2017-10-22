@@ -5,6 +5,14 @@
     <title>Dumb Dinosaur game</title>
     <script src="p5.js"></script>
     <script src='p5.dom.js'></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107125985-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-107125985-1');
+    </script>
   </head>
   <body>
     <script type="text/javascript">
@@ -141,6 +149,9 @@ function die(){
   if(score>highScore){
     highScore=score
   }
+  d.yv=0
+  d.y=145*sizeMul
+  jumped=false
   dead=true
   pop()
 }
