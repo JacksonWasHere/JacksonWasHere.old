@@ -75,7 +75,8 @@ function obstacle() {
   this.xv=14*sizeMul
   this.draw=function() {
     fill(255)
-    rect(this.x,150*sizeMul,10*sizeMul,20*sizeMul)
+    grem=new gremlin(this.x,150*sizeMul,10*sizeMul,20*sizeMul)
+    grem.draw()
   }
   this.update=function(){
     this.x-=this.xv
@@ -126,8 +127,6 @@ function draw() {
       nextwait=int(random(15*sizeMul,30*sizeMul))
     }
   }
-  var gg=new gremlin(20*sizeMul,20*sizeMul,10*sizeMul,10*sizeMul)
-  gg.draw()
 }
 function addObstacle() {
   obs.push(new obstacle())
