@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>15 Slide Puzzle</title>
+    <script type="text/javascript" src="p5.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var grid=[]
+var gwh=4
+var ght=4
+var cellWid=100
+var zero=[gwh-1,ght-1]
+function setup() {
+  createCanvas(cellWid*gwh,cellWid*ght)
+  for (var i = 0; i < gwh; i++) {
+    grid[i]=[]
+    for (var j = 0; j < ght; j++) {
+      grid[i][j]=(j+1)+(i*ght)
+    }
+  }
+  noStroke(255)
+  textSize(20)
+  grid[zero[0]][zero[1]]=0
+  for (var i = 0; i < gwh; i++) {
+    for (var j = 0; j < ght; j++) {
+    fill(0)
+    rect(j*cellWid,i*cellWid,cellWid,cellWid)
+    fill(255)
+    text(""+grid[i][j],j*cellWid+cellWid/2,(i+1)*cellWid-cellWid/2)
+    }
+  }
+}
+function keyPressed() {
+  if (key=="W" && zero[0]>0) {
+    grid[zero[0]][zero[1]]=grid[zero[0]-1][zero[1]]
+    grid[zero[0]-1][zero[1]]=0
+    zero[0]-=1
+    drawGame(zero,0,-1)
+  } else if (key=="A" && zero[1]>0) {
+    grid[zero[0]][zero[1]]=grid[zero[0]][zero[1]-1]
+    grid[zero[0]][zero[1]-1]=0
+    zero[1]-=1
+    drawGame(zero,-1,0)
+  } else if (key=="D" && zero[1]<gwh-1) {
+    grid[zero[0]][zero[1]]=grid[zero[0]][zero[1]+1]
+    grid[zero[0]][zero[1]+1]=0
+    zero[1]+=1
+    drawGame(zero,1,0)
+  } else if(key=="S" && zero[0]<ght-1){
+    grid[zero[0]][zero[1]]=grid[zero[0]+1][zero[1]]
+    grid[zero[0]+1][zero[1]]=0
+    zero[0]+=1
+    drawGame(zero,0,1)
+  } else if(key=="R"){
+    scramble()
+  }
+  //console.log(key);
+  //console.log(zero[0]+", "+zero[1]);
+}
+function drawGame(ind,xadd,yadd) {
+  //noStroke()
+  fill(0)
+  rect(ind[1]*cellWid,ind[0]*cellWid,cellWid,cellWid)
+  //fill(255-(grid[ind[1]-xadd][ind[0]-yadd]/15*255))
+  rect((ind[1]-xadd)*cellWid,(ind[0]-yadd)*cellWid,cellWid,cellWid)
+  fill(255)
+  text(""+grid[(ind[0]-yadd)][(ind[1]-xadd)],(ind[1]-xadd)*cellWid+cellWid/2,((ind[0]-yadd)+1)*cellWid-cellWid/2)
+  text("0",ind[1]*cellWid+cellWid/2,(ind[0]+1)*cellWid-cellWid/2)
+}
+function scramble() {
+
+}
+
+    </script>
+  </body>
+</html>
