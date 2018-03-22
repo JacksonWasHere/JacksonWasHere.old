@@ -4,145 +4,121 @@
     <meta charset="utf-8">
     <title>15 Slide Puzzle</title>
     <script type="text/javascript" src="p5.js"></script>
+    <script src="game.js" charset="utf-8"></script>
   </head>
   <body>
     <script type="text/javascript">
 
-function game(wid,hght,cSize) {
-  this.width=wid
-  this.height=hght
-  this.cellSize=cSize
-  this.emptyX=wid-1
-  this.emptyY=hght-1
-  this.grid=[]
-  this.buffer=1
-  for (var i = 0; i < this.width; i++) {
-    this.grid[i]=[]
-    for (var j = 0; j < this.height; j++) {
-      this.grid[i][j]=this.width*i+j+1
-    }
-  }
-  this.inBounds=function(num,grid){
-    return num > -1 && num < grid.length
-  }
-  console.log(this.grid);
-  this.move=function(xDir,yDir){
-    if (this.inBounds(this.emptyX+xDir,this.grid) && this.inBounds(this.emptyY+yDir,this.grid[0])) {
-      var temp=this.grid[this.emptyX][this.emptyY]
-      this.grid[this.emptyX][this.emptyY]=this.grid[this.emptyX+xDir][this.emptyY+yDir]
-      this.grid[this.emptyX+xDir][this.emptyY+yDir]=temp
-      this.emptyX+=xDir
-      this.emptyY+=yDir
-    }
-    this.drawGame()
-    return this.isSolved()
-  }
-  this.isSolved=function(){
-    for (var i = 0; i < this.width; i++) {
-      for (var j = 0; j < this.height; j++) {
-        if(this.grid[i][j]!=this.width*i+j+1){
-          return false
-        }
-      }
-    }
-    return true
-  }
-  this.drawGame=function(){
-    background(255)
-    for (var i = 0; i < this.grid.length; i++) {
-      for (var j = 0; j < this.grid[i].length; j++) {
-        var curNum=this.grid[i][j]
-        this.drawSquare(curNum,j*this.cellSize+j*this.buffer,i*this.cellSize+i*this.buffer)
-      }
-    }
-  }
-  this.drawSquare=function(num,x,y){
-    if (num==this.width*this.height) {
-      return
-    }
-    fill(85, 255, 76)
-    rect(x,y,this.cellSize,this.cellSize,this.cellSize/5)
-    textAlign(CENTER,CENTER)
-    fill(0)
-    textSize(this.cellSize/2)
-    text(num,x+this.cellSize/2,y+this.cellSize/2)
-  }
-}
-function conts() {
-  this.up="W"
-  this.left="A"
-  this.down="S"
-  this.right="D"
-  this.scramble=" "
-}
-function solve(scram,time,penalty) {
-  this.scramble=scram
-  this.time=time
-  this.display=this.time
-  this.penalty=penalty
-  if (this.penalty=="dnf") {
-    this.display="dnf"
-  } else if (this.penalty=="+2") {
-    this.time+=2
-    this.display=this.time+"+"
-  }
-}
+
 var mainGame
 var controls
+
 var cellSize=60
 var gameWidth=4
 var gameHeight=4
+
 var solves=[]
-var startTime
-var endTime
+var startTime=0
+var endTime=0
+var moveCount=0
+var currentTime
+
 var solving=false
 var scrambled=false
+
+var moves=[[0,1],[0,-1],[1,0],[-1,0]]
+var notation=["R ","L ","U ","D "]
+
 function setup() {
+  stroke(1)
   controls=new conts()
   mainGame=new game(gameWidth,gameHeight,cellSize)
-  createCanvas(1000,1000)
+  createCanvas(400,400)
   mainGame.drawGame()
 }
-function startSolve() {
-  var startTime=millis()
-  var solving=true
-}
-function endSolve(pen){
-  var endTime=millis()
-  var solving=false
-  var scrambled=false
-}
-function scramble() {
 
+
+function draw() {
+  fill(255)
+  noStroke()
+  rect(0,260,350,350)
+  fill(0)
+  stroke(1)
+  textAlign(RIGHT)
+  text(getTime(),300,300)
 }
+
+
+function getTime() {
+  return floor(solving? millis()-startTime:endTime-startTime)
+}
+
+
+function startSolve() {
+  startTime=millis()
+  solving=true
+  scrambled=false
+}
+
+
+function endSolve(pen){
+  endTime=millis()
+  solving=false
+  scrambled=false
+  solves.push(new solve("a",floor(-startTime+endTime),"",moveCount))
+  moveCount=0
+}
+
+
+function scramble() {
+  var previousM=[0,0]
+  var attempts=0
+  var scram=""
+  for (var i = 0; i < 80; i++) {
+    var ind=floor(random()*4)
+    var move=moves[ind]
+    if (move[0] != -previousM[0] && move[1] != -previousM[1] && mainGame.move(move[0],move[1])) {
+      scram+=notation[ind]
+    } else {
+      i-=1
+    }
+    previousM=move
+    attempts++
+  }
+  scrambled=true
+  console.log(scram);
+  console.log(attempts);
+}
+
+
 function keyPressed() {
   if (key==controls.up) {
-    if(mainGame.move(-1,0)){
-      endSolve()
-    }
+    mainGame.move(-1,0)
     if (scrambled) {
       startSolve()
+    } else if (solving) {
+      moveCount++
     }
   } else if (key==controls.left) {
-    if(mainGame.move(0,-1)){
-      endSolve()
-    }
+    mainGame.move(0,-1)
     if (scrambled) {
       startSolve()
+    } else if (solving) {
+      moveCount++
     }
   } else if (key==controls.down) {
-    if(mainGame.move(1,0)){
-      endSolve()
-    }
+    mainGame.move(1,0)
     if (scrambled) {
       startSolve()
+    } else if (solving) {
+      moveCount++
     }
   } else if(key==controls.right){
-    if(mainGame.move(0,1)){
-      endSolve()
-    }
+    mainGame.move(0,1)
     if (scrambled) {
       startSolve()
+    } else if (solving) {
+      moveCount++
     }
   } else if(key==controls.scramble){
     if (!solving) {
@@ -154,6 +130,12 @@ function keyPressed() {
       endSolve("dnf")
     }
   }
+  if (mainGame.isSolved() && solving) {
+    endSolve()
+    console.log("Test");
+  }
+  console.log(mainGame.isSolved());
+  mainGame.drawGame()
 }
 
     </script>
