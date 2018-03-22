@@ -2,6 +2,7 @@ function game(wid,hght,cSize,x,y) {
   this.width=wid
   this.height=hght
   this.cellSize=cSize
+  console.log(this.cellSize);
   this.x=x
   this.y=y
   this.grid=[]
@@ -76,13 +77,13 @@ function conts() {
 function solve(scram,time,penalty,moves) {
   this.scramble=scram
   this.time=time
-  this.display=this.time
+  this.display=formatTime(this.time)
   this.moves=moves
   this.penalty=penalty
   if (this.penalty=="dnf") {
     this.display="dnf"
   } else if (this.penalty=="+2") {
-    this.time+=2
+    this.time+=2000
     this.display=this.time+"+"
   }
 }
