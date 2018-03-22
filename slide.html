@@ -32,20 +32,49 @@ var notation=["R ","L ","U ","D "]
 function setup() {
   stroke(1)
   controls=new conts()
-  mainGame=new game(gameWidth,gameHeight,cellSize)
-  createCanvas(400,400)
+  mainGame=new game(gameWidth,gameHeight,cellSize,0,50)
+  mainGame.setup()
+  createCanvas(550,400)
   mainGame.drawGame()
 }
 
 
 function draw() {
-  fill(255)
-  noStroke()
-  rect(0,260,350,350)
+  background(220)
+  StatsCurrent(260,50,0,0,0)
+  mainGame.drawGame()
+}
+
+
+function StatsCurrent(x,y) {
   fill(0)
-  stroke(1)
-  textAlign(RIGHT)
-  text(getTime(),300,300)
+  textAlign(LEFT,TOP)
+  text("Time: "+formatTime(getTime()),x,y)
+  text("Moves: "+moveCount,x,y+30)
+  text("avg TPS: "+floor(moveCount/(getTime()/1000)*100)/100,x,y+60)
+  text("Penalty: "+(!solving && !mainGame.isSolved() && !scrambled?"DNF":"none"),x,y+90)
+}
+
+
+function statsGeneral() {
+
+}
+
+
+function allSolves() {
+
+}
+
+
+function formatTime(timeMillis){
+  var mil=timeMillis%1000
+  var sec=floor(timeMillis/1000)%60
+  var min=floor(timeMillis/60000)
+  if (min>0) {
+    return min+":"+(sec<10?"0"+sec:sec)+"."+mil
+  } else {
+    return (sec<10?"0"+sec:sec)+"."+mil
+  }
 }
 
 
@@ -55,6 +84,7 @@ function getTime() {
 
 
 function startSolve() {
+  moveCount=0
   startTime=millis()
   solving=true
   scrambled=false
@@ -66,11 +96,11 @@ function endSolve(pen){
   solving=false
   scrambled=false
   solves.push(new solve("a",floor(-startTime+endTime),"",moveCount))
-  moveCount=0
 }
 
 
 function scramble() {
+  mainGame.setup()
   var previousM=[0,0]
   var attempts=0
   var scram=""
@@ -125,9 +155,9 @@ function keyPressed() {
       scramble()
       scrambled=true
     } else {
+      endSolve("dnf")
       scramble()
       scrambled=true
-      endSolve("dnf")
     }
   }
   if (mainGame.isSolved() && solving) {
