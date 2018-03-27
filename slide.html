@@ -120,7 +120,7 @@ function endSolve(pen){
   solving=false
   scrambled=false
 
-  solves.push(new solve(currentScramble,floor(-startTime+endTime),"",moveCount))
+  solves.push(new solve(currentScramble,floor(-startTime+endTime),pen,moveCount))
   allSolves()
 }
 

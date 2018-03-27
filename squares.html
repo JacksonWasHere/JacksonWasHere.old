@@ -138,12 +138,14 @@
       if(sizeIn.value() != ""){
         background(255)
         var input = sizeIn.value()
-        var x=input.substring(0,input.indexOf(","))
-        var y=input.substring(input.indexOf(",")+1)
-        x=parseInt(x)
-        y=parseInt(y)
-        gameHeight=y
-        gameWidth=x
+        if (input.indexOf(",")>=0) {
+          var x=input.substring(0,input.indexOf(","))
+          var y=input.substring(input.indexOf(",")+1)
+          x=parseInt(x)
+          y=parseInt(y)
+          gameHeight=y
+          gameWidth=x
+        }
         solution=[]
         for (var i = 0; i < gameWidth; i++) {
           solution[i]=false
@@ -196,12 +198,6 @@
         }
         reset()
         solution=increase(solution)
-      }
-    }
-    function solved() {
-      var isSolved=true
-      for([] s:b.grid){
-        console.log(s)
       }
     }
     function solved(){
