@@ -4,25 +4,36 @@
     <meta charset="utf-8">
     <title>Mandelbrot</title>
     <script src="p5.js" charset="utf-8"></script>
+    <script src="p5.dom.js" charset="utf-8"></script>
+    <style media="screen">
+
+    </style>
     <script type="text/javascript">
-var curWid=3
-var curHt=3
-var curX=-0.5
+var curWid=4
+var curHt=4
+var curX=0
 var curY=0
 var curCA
 var curCB
 var historyz=[]
 var view2
+var checkCA
+var checkCB
+var slideCA
+var slideCB
 var rlog = (base,num)=>{return log(num)/log(base)}
-var n = (a,b)=>{drawSet(curX,curY,curWid,curHt,a,b)}
 function setup(){
   createCanvas(400,400)
   view2=createGraphics(400,400)
+  slideCA=createSlider(-2,2,0)
+  slideCB=createSlider(-2,2,0)
+  slideCA.changed(update)
+  slideCB.changed(update)
   background(255)
   view2.colorMode(HSB,100)
   view2.noStroke()
   noStroke()
-  drawSet(-0.5,0,3,3,-0.8,0.156)
+  drawSet(0,0,4,4)
   console.log("Done");
 }
 function draw(){
@@ -31,19 +42,19 @@ function draw(){
   image(view2,0,0)
   rect(mouseX-100,mouseY-100,200,200)
 }
-function n(inp){
-  curCA=float(inp.slice(0,-1).split("+")[0])
-  curCB=float(inp.slice(0,-1).split("+")[1])
-  drawSet(curX,curY,curWid,curHt,a,b)
+function update(){
+  drawSet(curX,curY,curWid,curHt)
 }
-function drawSet(x,y,w,h,nca,ncb){
+function drawSet(x,y,w,h){
+  var cca=slideCA.value()
+  var ccb=slideCB.value()
   for (var i = 0; i < width; i++) {
     for (var j = 0; j < height; j++) {
       var a=map(i,0,width,x-w/2,x+w/2)
       var b=map(j,0,height,y-h/2,y+h/2)
       // -0.8+0.156i
-      var ca=a
-      var cb=b
+      var ca=cca
+      var cb=ccb
       var n=0
       while(n<100){
         var aa=a*a-b*b
@@ -77,9 +88,6 @@ function keyPressed(){
     drawSet(curX,curY,curWid,curHt,-0.8,0.156)
   }
 }
-function rLog(base,num){
-  return log(num)/log(base)
-}
 function mousePressed() {
   if(!(mouseX>width || mouseX<0 || mouseY>height || mouseY<0)){
     var nx=map(mouseX,0,width,curX-curWid/2,curX+curWid/2)
@@ -91,7 +99,7 @@ function mousePressed() {
     curX=nx
     curY=ny
     console.log(curX+", "+curY);
-    drawSet(nx,ny,curWid,curHt,-0.8,0.156)
+    drawSet(nx,ny,curWid,curHt)
   }
 }
     </script>
