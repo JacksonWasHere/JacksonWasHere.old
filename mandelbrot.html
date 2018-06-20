@@ -45,6 +45,36 @@ function draw(){
 function update(){
   drawSet(curX,curY,curWid,curHt)
 }
+function drawSet2(newCA,newCB){
+  var x=curX,y=curY,w=curWid,h=curHt
+  for (var i = 0; i < width; i++) {
+    for (var j = 0; j < height; j++) {
+      var a=map(i,0,width,x-w/2,x+w/2)
+      var b=map(j,0,height,y-h/2,y+h/2)
+      var ca=newCA
+      var cb=newCB
+      var n=0
+      while(n<100){
+        var aa=a*a-b*b
+        var bb=2*a*b
+        var aa2=aa+ca
+        var bb2=bb+cb
+        a=aa2
+        b=bb2
+        n++
+        if(abs(a+b)>16){
+          break;
+        }
+      }
+      if(n==100){
+        view2.fill(0);
+      } else {
+        view2.fill(n,100,100)
+      }
+      view2.rect(i,j,1,1);
+    }
+  }
+}
 function drawSet(x,y,w,h){
   var cca=slideCA.value()
   var ccb=slideCB.value()
