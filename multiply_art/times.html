@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Times Tables</title>
+    <script type="text/javascript" src="../p5.js"></script>
+    <script type="text/javascript" src="../p5.dom.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+
+function make_svg(multi,point,color,name){
+  this.ppoints=[]
+  this.totalPoints = point
+  this.multiplier=multi
+  this.out=""
+  this.offset=210
+  function drawStuff() {
+    for (var i = 1; i <= this.totalPoints  ; i++) {
+        ppoints.push(drawPoint(offset-10, i, this.totalPoints))
+    }
+    for (var i = 0; i < this.ppoints.length; i++) {
+      var cur=this.ppoints[i]
+      var nex=this.ppoints[floor(i*this.multiplier%this.ppoints.length)]
+      this.out+="  "+line_svg(cur.x,cur.y,nex.x,nex.y,i)+"\n"
+    }
+  }
+  function drawPoint(r, currentPoint, totalPoints) {
+
+    var theta = ((Math.PI*2) / this.totalPoints);
+    var angle = (theta * currentPoint);
+
+    var x = (r * Math.cos(angle));
+    var y = (r * Math.sin(angle));
+    fill(0)
+    //rect(x+287.5,y+287.5,5,5)
+    return {x,y}
+  }
+  function line_svg(x1,y1,x2,y2,num){
+      num=float(num)
+      return "<line x1=\""+str(x1+offset)+"\" y1=\""+str(y1+offset)+"\" x2=\""+str(x2+offset)+"\" y2=\""+str(y2+offset)+"\" style=\"fill: none;stroke: hsl("+str((num/totalPoints)*360)+",100%,50%);stroke-miterlimit: 10;stroke-width: 1px\"/>"
+  }
+  function line_black_svg(x1,y1,x2,y2){
+      return "<line x1=\""+str(x1+offset)+"\" y1=\""+str(y1+offset)+"\" x2=\""+str(x2+offset)+"\" y2=\""+str(y2+offset)+"\" style=\"fill: none;stroke: #000000;stroke-miterlimit: 10;stroke-width: 1px\"/>"
+  }
+
+  this.start="<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\">\n"
+  this.end="</svg>"
+  drawStuff()
+  return this.start+this.out+this.end;
+}
+var num=0
+function setup() {
+  noCanvas()
+  document.write("<div id='lines'>\n"+make_svg(2,100,false,"john")+"</div>")
+}
+//48-51
+function rd(num){
+  document.getElementById("lines").remove(document.getElementById('Layer_1'))
+  document.write("<div id='lines'>\n"+make_svg(num,100,false,"john")+"</div>")
+}
+function draw() {
+  num+=0.01
+  console.log(num);
+  document.getElementById("lines").remove(document.getElementById('Layer_1'))
+  document.write("<div id='lines'>\n"+make_svg(num,100,false,"john")+"</div>")
+}
+    </script>
+  </body>
+</html>
