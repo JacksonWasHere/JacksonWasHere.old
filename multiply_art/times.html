@@ -7,10 +7,13 @@
     <script type="text/javascript" src="../p5.dom.js"></script>
   </head>
   <body>
+    <div id='lines'>
+
+    </div>
     <script type="text/javascript">
 
 
-function make_svg(multi,point,color,name){
+function make_svg(multi,point,color,name,minus){
   this.ppoints=[]
   this.totalPoints = point
   this.multiplier=multi
@@ -18,12 +21,18 @@ function make_svg(multi,point,color,name){
   this.offset=210
   function drawStuff() {
     for (var i = 1; i <= this.totalPoints  ; i++) {
+      if(minus){
+        ppoints.push(drawPoint(offset-10, this.totalPoints-i, this.totalPoints))
+      }
+      else{
         ppoints.push(drawPoint(offset-10, i, this.totalPoints))
+      }
     }
     for (var i = 0; i < this.ppoints.length; i++) {
       var cur=this.ppoints[i]
       var nex=this.ppoints[floor(i*this.multiplier%this.ppoints.length)]
-      this.out+="  "+line_svg(cur.x,cur.y,nex.x,nex.y,i)+"\n"
+      num=minus?this.totalPoints-1-i:i
+      this.out+="  "+line_svg(cur.x,cur.y,nex.x,nex.y,num)+"\n"
     }
   }
   function drawPoint(r, currentPoint, totalPoints) {
@@ -37,9 +46,9 @@ function make_svg(multi,point,color,name){
     //rect(x+287.5,y+287.5,5,5)
     return {x,y}
   }
-  function line_svg(x1,y1,x2,y2,num){
-      num=float(num)
-      return "<line x1=\""+str(x1+offset)+"\" y1=\""+str(y1+offset)+"\" x2=\""+str(x2+offset)+"\" y2=\""+str(y2+offset)+"\" style=\"fill: none;stroke: hsl("+str((num/totalPoints)*360)+",100%,50%);stroke-miterlimit: 10;stroke-width: 1px\"/>"
+  function line_svg(x1,y1,x2,y2,numcol){
+      numcol=float(numcol)
+      return "<line x1=\""+str(x1+offset)+"\" y1=\""+str(y1+offset)+"\" x2=\""+str(x2+offset)+"\" y2=\""+str(y2+offset)+"\" style=\"fill: none;stroke: hsl("+str((numcol/totalPoints)*360)+",100%,50%);stroke-miterlimit: 10;stroke-width: 1px\"/>"
   }
   function line_black_svg(x1,y1,x2,y2){
       return "<line x1=\""+str(x1+offset)+"\" y1=\""+str(y1+offset)+"\" x2=\""+str(x2+offset)+"\" y2=\""+str(y2+offset)+"\" style=\"fill: none;stroke: #000000;stroke-miterlimit: 10;stroke-width: 1px\"/>"
@@ -50,21 +59,25 @@ function make_svg(multi,point,color,name){
   drawStuff()
   return this.start+this.out+this.end;
 }
-var num=0
+var numx=0.02
+var dnum=0.01
 function setup() {
   noCanvas()
-  document.write("<div id='lines'>\n"+make_svg(2,100,false,"john")+"</div>")
+  // console.log(mouseX);
+  document.open()
+  document.write(make_svg(map(mouseX,0,600,0,10),200,false,"john",false))
+  document.close()
 }
 //48-51
 function rd(num){
-  document.getElementById("lines").remove(document.getElementById('Layer_1'))
+  document.getElementById("lines").removeChild(document.getElementById('Layer_1'))
   document.write("<div id='lines'>\n"+make_svg(num,100,false,"john")+"</div>")
 }
 function draw() {
-  num+=0.01
-  console.log(num);
-  document.getElementById("lines").remove(document.getElementById('Layer_1'))
-  document.write("<div id='lines'>\n"+make_svg(num,100,false,"john")+"</div>")
+
+}
+function mousePressed(){
+  console.log(mouseX);
 }
     </script>
   </body>
