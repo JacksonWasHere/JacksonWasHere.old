@@ -65,7 +65,7 @@ function setup() {
   noCanvas()
   // console.log(mouseX);
   document.open()
-  document.write(make_svg(map(mouseX,0,600,0,10),200,false,"john",false))
+  document.write(make_svg(2,200,false,"john",false))
   document.close()
 }
 //48-51
@@ -73,11 +73,13 @@ function rd(num){
   document.getElementById("lines").removeChild(document.getElementById('Layer_1'))
   document.write("<div id='lines'>\n"+make_svg(num,100,false,"john")+"</div>")
 }
-function draw() {
+function draw() {}
 
-}
 function mousePressed(){
   console.log(mouseX);
+  document.open()
+  document.write(make_svg(floor(map(mouseX,0,600,0,20)),200,false,"john",false))
+  document.close()
 }
     </script>
   </body>

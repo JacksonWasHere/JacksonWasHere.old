@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Full Board</title>
+    <script type="text/javascript" src="../p5.js"></script>
+    <script type="text/javascript" src="../p5.dom.js"></script>
+    <script src="board.js" charset="utf-8"></script>
+    <script src="getBoard.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+var canvas;
+var board = new Board(7,getMap(0));
+var num = 0;
+
+function setup(){
+
+  can = createCanvas(301,301);
+  var x = (windowWidth - width) / 2;
+  var y = (windowHeight - height) / 2;
+  can.position(x, y);
+
+  board = new Board(7,getMap(0));
+  board.draw();
+}
+
+function draw() {
+  var x = (windowWidth - width) / 2;
+  var y = (windowHeight - height) / 2;
+  can.position(x, y);
+
+  board.draw();
+}
+
+function mousePressed(){
+  var posX = floor(map(mouseX,0,300,0,board.size))
+  var posY = floor(map(mouseY,0,300,0,board.size))
+  console.log(posX,posY);
+  board.makeMove(posX,posY)
+
+  if (board.isSolved()) {
+    num++;
+    board = new Board(7,getMap(num));
+  }
+}
+
+    </script>
+  </body>
+</html>
