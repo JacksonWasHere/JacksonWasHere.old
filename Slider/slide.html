@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>15 Slide Puzzle</title>
+    <script src="../p5.js" charset="utf-8"></script>
+    <script src="../p5.dom.js" charset="utf-8"></script>
+    <script src="game.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+
+var mainGame
+var controls
+
+var cellSize=60
+var gameWidth=4
+var gameHeight=4
+
+var solves=[]
+var startTime=0
+var endTime=0
+var moveCount=0
+var currentScramble
+var solvesList
+
+var solving=false
+var scrambled=false
+
+var moves=[[0,1],[0,-1],[1,0],[-1,0]]
+var notation=["R ","L ","U ","D "]
+
+function setup() {
+  stroke(1)
+
+  controls=new conts()
+  mainGame=new game(gameWidth,gameHeight,cellSize,0,50)
+
+  createCanvas(550,400)
+  solvesList=createP("Solves: ")
+  solvesList.size(400)
+
+  mainGame.setup()
+  mainGame.drawGame()
+}
+
+
+function newSize(wid,he) {
+  mainGame=new game(wid,he,240/wid,0,50)
+
+  mainGame.setup()
+  mainGame.drawGame()
+}
+
+
+function draw() {
+  background(220)
+
+  StatsCurrent(260,50,0,0,0)
+  mainGame.drawGame()
+}
+
+
+function StatsCurrent(x,y) {
+  fill(0)
+  textAlign(LEFT,TOP)
+
+  text("Time: "+formatTime(getTime()),x,y)
+  text("Moves: "+moveCount,x,y+30)
+  text("avg TPS: "+floor(moveCount/(getTime()/1000)*100)/100,x,y+60)
+  text("Penalty: "+(!solving && !mainGame.isSolved() && !scrambled?"DNF":"none"),x,y+90)
+}
+
+
+function statsGeneral() {
+
+}
+
+
+function allSolves() {
+  var value="Solves: "
+
+  for (var i = 0; i < solves.length; i++) {
+    value+=solves[i].display+", "
+  }
+
+  solvesList.html(value)
+}
+
+
+function formatTime(timeMillis){
+  var mil=timeMillis%1000
+  var sec=floor(timeMillis/1000)%60
+  var min=floor(timeMillis/60000)
+  if (min>0) {
+    return min+":"+(sec<10?"0"+sec:sec)+"."+mil
+  } else {
+    return (sec)+"."+mil
+  }
+}
+
+
+function getTime() {
+  return floor(solving? millis()-startTime:endTime-startTime)
+}
+
+
+function startSolve() {
+  moveCount=0
+  startTime=millis()
+  solving=true
+  scrambled=false
+}
+
+
+function endSolve(pen){
+  endTime=millis()
+
+  solving=false
+  scrambled=false
+
+  solves.push(new solve(currentScramble,floor(-startTime+endTime),pen,moveCount))
+  allSolves()
+}
+
+
+function scramble() {
+  mainGame.setup()
+  var previousM=[0,0]
+  var attempts=0
+  var scram=""
+  for (var i = 0; i < 20*mainGame.width; i++) {
+    var ind=floor(random()*4)
+    var move=moves[ind]
+    if (move[0] != -previousM[0] && move[1] != -previousM[1] && mainGame.move(move[0],move[1])) {
+      scram+=notation[ind]
+    } else {
+      i-=1
+    }
+    previousM=move
+    attempts++
+  }
+  scrambled=true
+  currentScramble=scram
+  console.log(scram);
+  console.log(attempts);
+}
+
+
+function keyPressed() {
+  if (key==controls.up) {
+    mainGame.move(-1,0)
+    if (scrambled) {
+      startSolve()
+    } else if (solving) {
+      moveCount++
+    }
+  } else if (key==controls.left) {
+    mainGame.move(0,-1)
+    if (scrambled) {
+      startSolve()
+    } else if (solving) {
+      moveCount++
+    }
+  } else if (key==controls.down) {
+    mainGame.move(1,0)
+    if (scrambled) {
+      startSolve()
+    } else if (solving) {
+      moveCount++
+    }
+  } else if(key==controls.right){
+    mainGame.move(0,1)
+    if (scrambled) {
+      startSolve()
+    } else if (solving) {
+      moveCount++
+    }
+  } else if(key==controls.scramble){
+    if (!solving) {
+      scramble()
+      scrambled=true
+    } else {
+      endSolve("dnf")
+      scramble()
+      scrambled=true
+    }
+  }
+  if (mainGame.isSolved() && solving) {
+    endSolve()
+    console.log("Test");
+  }
+  console.log(mainGame.isSolved());
+  mainGame.drawGame()
+}
+
+    </script>
+  </body>
+</html>

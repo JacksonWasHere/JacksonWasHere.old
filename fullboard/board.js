@@ -56,16 +56,34 @@ function Board(size,text) {
     }
   }
 
-  this.isSolved = function(){
-    console.log(this.gameBoard);
+  this.getState = function(){
+    var state = 0;
+
     for (var i = 0; i < this.gameBoard.length; i++) {
       for (var j = 0; j < this.gameBoard[i].length; j++) {
         if(this.gameBoard[i][j] == 1){
-          return false;
+          state = 1;
         }
       }
     }
-    return true;
+
+    if (state != 0) {
+      var x = 1
+      var y = 0
+      var prev = state
+      state = 2
+      console.log(this.gameBoard,x,y);
+      for (var i = 0; i < 4; i++) {
+        if (this.gameBoard[this.ballLoc[0]+x][this.ballLoc[1]+y]==1) {
+          state = prev
+        }
+        var temp = x
+        x = y
+        y = -temp
+      }
+    }
+
+    return state;
   }
 
   this.draw = function() {

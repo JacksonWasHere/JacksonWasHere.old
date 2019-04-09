@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!-- <script src="p5.js" charset="utf-8"></script>
+    <script src="p5.dom.js" charset="utf-8"></script>
+    <script src="rubberduck.js" charset="utf-8"></script> -->
+    <title></title>
+  </head>
+  <body>
+    <center>
+      <img src="duck.png" alt=""><br>
+      <textarea id="information" rows="8" cols="80"></textarea><br>
+      <button type="button" onclick="talkToDuck();">Submit</button>
+    </center>
+    <script type="text/javascript">
+      function talkToDuck(){
+        comments = ["Interesting..","Try googling it?","Have you tried another approach?","Try using debug mode","Print out the values",
+          "ask a friend for help"];
+        document.getElementById('information').value = "";
+        alert(comments[Math.floor(Math.random()*comments.length)]);
+      }
+    </script>
+  </body>
+</html>

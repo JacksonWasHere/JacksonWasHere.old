@@ -12,6 +12,7 @@
     <script type="text/javascript">
 var canvas;
 var board = new Board(7,getMap(0));
+var reset;
 var num = 0;
 
 function setup(){
@@ -21,6 +22,12 @@ function setup(){
   var y = (windowHeight - height) / 2;
   can.position(x, y);
 
+  reset = createButton("Reset");
+  x = (windowWidth - width) / 2;
+  y = (windowHeight - height) / 2 + 300;
+  reset.position(x, y);
+  reset.mousePressed(resetBoard);
+
   board = new Board(7,getMap(0));
   board.draw();
 }
@@ -29,19 +36,36 @@ function draw() {
   var x = (windowWidth - width) / 2;
   var y = (windowHeight - height) / 2;
   can.position(x, y);
+  x = (windowWidth - width) / 2;
+  y = (windowHeight - height) / 2 + 300;
+  reset.position(x, y);
+}
 
-  board.draw();
+function resetBoard() {
+  board = new Board(7,getMap(num));
+  board.draw()
 }
 
 function mousePressed(){
-  var posX = floor(map(mouseX,0,300,0,board.size))
-  var posY = floor(map(mouseY,0,300,0,board.size))
-  console.log(posX,posY);
-  board.makeMove(posX,posY)
+  if(mouseX >= 0 && mouseX <= 300 && mouseY >= 0 && mouseY <= 300) {
+    var posX = floor(map(mouseX,0,300,0,board.size))
+    var posY = floor(map(mouseY,0,300,0,board.size))
+    console.log(posX,posY);
+    board.makeMove(posX,posY)
+    board.draw()
 
-  if (board.isSolved()) {
-    num++;
-    board = new Board(7,getMap(num));
+    console.log(board.getState());
+    if (board.getState() == 0) {
+      num++;
+      board = new Board(7,getMap(num%12));
+      board.draw()
+    } else if (board.getState()==2) {
+      fill(255,0,0)
+      textAlign(CENTER,CENTER)
+      textSize(30)
+      text("Failed",150,150)
+      console.log("Dead");
+    }
   }
 }
 
